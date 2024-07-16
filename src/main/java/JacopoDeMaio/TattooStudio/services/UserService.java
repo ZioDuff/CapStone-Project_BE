@@ -1,7 +1,10 @@
 package JacopoDeMaio.TattooStudio.services;
 
+import JacopoDeMaio.TattooStudio.entities.Role;
 import JacopoDeMaio.TattooStudio.entities.User;
+import JacopoDeMaio.TattooStudio.exceptions.BadRequestException;
 import JacopoDeMaio.TattooStudio.exceptions.NotFoundException;
+import JacopoDeMaio.TattooStudio.payloads.userDTO.UserDTO;
 import JacopoDeMaio.TattooStudio.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -11,6 +14,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -30,25 +35,24 @@ public class UserService {
         return userRepository.findAll(pageable);
     }
 
-//    public User saveUser(UserDTO body) {
-//        this.userRepository.findByEmail(body.email()).ifPresent(utente -> {
-//            throw new BadRequestException("The user with email: " + body.email() + ", already exist.");
-//        });
-//
-//
-//        //TODO 1 - SISTEMARE RUOLO DEFAULT
-//
-////        User user = new User(body.username(), body.email(), bCrypt.encode(body.password()), body.name(), body.surname());
-//////        Role foundRole = roleService.findByRoleName("User");
-////
-////        List<Role> roleList = new ArrayList<>();
-////
-//////        roleList.add(foundRole);
-////
-////        user.setRolesList(roleList);
-//
-////        return this.userRepository.save();
-//    }
+    public User saveUser(UserDTO body) {
+        this.userRepository.findByEmail(body.email()).ifPresent(utente -> {
+            throw new BadRequestException("The user with email: " + body.email() + ", already exist.");
+        });
+
+        this.userRepository.findByUsername(body.username()).ifPresent(user -> {
+            throw new BadRequestException("The username: " + body.username() + ", already exist.");
+        });
+
+        User newUser = new User(body.username(), body.email(), body.password(), body.name(), body.surname(), "https://ui-avatars.com/api/" + body.username());
+        Role found = roleService.findByRoleName("User");
+        List<Role> roleList = new ArrayList<>();
+        roleList.add(found);
+
+        newUser.setRolesList(roleList);
+
+        return this.userRepository.save(newUser);
+    }
 
 //    public User findByIdAndUpdate(UUID id, UserDTO payload) {
 //        User found = this.findById(id);

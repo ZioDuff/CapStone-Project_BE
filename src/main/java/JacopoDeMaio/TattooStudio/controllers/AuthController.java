@@ -1,14 +1,17 @@
 package JacopoDeMaio.TattooStudio.controllers;
 
+import JacopoDeMaio.TattooStudio.exceptions.BadRequestException;
+import JacopoDeMaio.TattooStudio.payloads.userDTO.NewUserResponseDTO;
+import JacopoDeMaio.TattooStudio.payloads.userDTO.UserDTO;
 import JacopoDeMaio.TattooStudio.payloads.userDTO.UserLoginDTO;
 import JacopoDeMaio.TattooStudio.payloads.userDTO.UserLoginResponseDTO;
 import JacopoDeMaio.TattooStudio.services.AuthService;
 import JacopoDeMaio.TattooStudio.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/auth")
@@ -22,5 +25,14 @@ public class AuthController {
     @PostMapping("/login")
     public UserLoginResponseDTO login(@RequestBody UserLoginDTO payload) {
         return new UserLoginResponseDTO(authService.authenticateUtenteAndGenerateToken(payload));
+    }
+
+    @PostMapping("/register")
+    @ResponseStatus(HttpStatus.CREATED)
+    public NewUserResponseDTO saveusers(@RequestBody @Validated UserDTO body, BindingResult validationResult) {
+        if (validationResult.hasErrors()) {
+            throw new BadRequestException(validationResult.getAllErrors());
+        }
+        return new NewUserResponseDTO(this.userService.saveUser(body).getId());
     }
 }
