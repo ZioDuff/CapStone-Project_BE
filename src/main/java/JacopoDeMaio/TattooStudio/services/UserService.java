@@ -44,7 +44,7 @@ public class UserService {
             throw new BadRequestException("The username: " + body.username() + ", already exist.");
         });
 
-        User newUser = new User(body.username(), body.email(), body.password(), body.name(), body.surname(), "https://ui-avatars.com/api/" + body.username());
+        User newUser = new User(body.username(), body.email(), bCrypt.encode(body.password()), body.name(), body.surname(), "https://ui-avatars.com/api/" + body.username());
         Role found = roleService.findByRoleName("User");
         List<Role> roleList = new ArrayList<>();
         roleList.add(found);
