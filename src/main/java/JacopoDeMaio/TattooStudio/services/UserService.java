@@ -54,6 +54,25 @@ public class UserService {
         return this.userRepository.save(newUser);
     }
 
+    public User adminSaveArtist(UserDTO body) {
+        this.userRepository.findByEmail(body.email()).ifPresent(utente -> {
+            throw new BadRequestException("The user with email: " + body.email() + ", already exist.");
+        });
+
+        this.userRepository.findByUsername(body.username()).ifPresent(user -> {
+            throw new BadRequestException("The username: " + body.username() + ", already exist.");
+        });
+
+        User newUser = new User(body.username(), body.email(), bCrypt.encode(body.password()), body.name(), body.surname(), "https://ui-avatars.com/api/" + body.username());
+        Role found = roleService.findByRoleName("TattoArtist");
+        List<Role> roleList = new ArrayList<>();
+        roleList.add(found);
+
+        newUser.setRolesList(roleList);
+
+        return this.userRepository.save(newUser);
+    }
+
     public User findByIdAndUpdate(UUID id, UserDTO payload) {
         User found = this.findById(id);
         found.setUsername(payload.username());

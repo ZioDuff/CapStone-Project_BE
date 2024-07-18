@@ -9,6 +9,7 @@ import JacopoDeMaio.TattooStudio.services.AuthService;
 import JacopoDeMaio.TattooStudio.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -30,6 +31,16 @@ public class AuthController {
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.CREATED)
     public NewUserResponseDTO saveUsers(@RequestBody @Validated UserDTO body, BindingResult validationResult) {
+        if (validationResult.hasErrors()) {
+            throw new BadRequestException(validationResult.getAllErrors());
+        }
+        return new NewUserResponseDTO(this.userService.saveUser(body).getId());
+    }
+
+    @PostMapping("/register")
+    @PreAuthorize("hasAuthority('Admin')")
+    @ResponseStatus(HttpStatus.CREATED)
+    public NewUserResponseDTO adminSaveTattoArtist(@RequestBody @Validated UserDTO body, BindingResult validationResult) {
         if (validationResult.hasErrors()) {
             throw new BadRequestException(validationResult.getAllErrors());
         }
