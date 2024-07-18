@@ -9,6 +9,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -26,6 +27,11 @@ public class UserController {
                                    @RequestParam(defaultValue = "10") int size,
                                    @RequestParam(defaultValue = "id") String sortedBy) {
         return userService.getAllUsers(page, size, sortedBy);
+    }
+
+    @GetMapping
+    public List<User> getArtist(@RequestParam String name) {
+        return userService.getArtist(name);
     }
 
     @GetMapping("/{userId}")

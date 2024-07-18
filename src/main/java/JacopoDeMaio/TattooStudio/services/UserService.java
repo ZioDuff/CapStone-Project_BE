@@ -35,6 +35,11 @@ public class UserService {
         return userRepository.findAll(pageable);
     }
 
+    public List<User> getArtist(String name) {
+
+        return userRepository.findByRoleName(name);
+    }
+
     public User saveUser(UserDTO body) {
         this.userRepository.findByEmail(body.email()).ifPresent(utente -> {
             throw new BadRequestException("The user with email: " + body.email() + ", already exist.");
