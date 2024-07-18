@@ -54,33 +54,25 @@ public class UserService {
         return this.userRepository.save(newUser);
     }
 
-//    public User findByIdAndUpdate(UUID id, UserDTO payload) {
-//        User found = this.findById(id);
-//        found.setUsername(payload.username());
-//        found.setName(payload.name());
-//        found.setSurname(payload.surname());
-//        found.setEmail(payload.email());
-//        found.setPassword(payload.password());
-//        return userRepository.save(found);
-//    }
+    public User findByIdAndUpdate(UUID id, UserDTO payload) {
+        User found = this.findById(id);
+        found.setUsername(payload.username());
+        found.setName(payload.name());
+        found.setSurname(payload.surname());
+        found.setEmail(payload.email());
+        found.setPassword(payload.password());
+        return userRepository.save(found);
+    }
 
-//    public void findByIdAndDelete(UUID id) {
-//        User found = this.findById(id);
-//        this.userRepository.delete(found);
-//    }
+    public void findByIdAndDelete(UUID id) {
+        User found = this.findById(id);
+        this.userRepository.delete(found);
+    }
 
 
     public User findById(UUID id) {
         return this.userRepository.findById(id).orElseThrow(() -> new NotFoundException(id));
     }
-
-//    public User addRoles(UUID id, RoleAssignedDTO roleId) {
-//        User found = this.findById(id);
-//        Role role = this.roleService.findById(roleId.id());
-//        found.getRolesList().add(role);
-//
-//        return this.userRepository.save(found);
-//    }
 
     public User findByEmail(String email) {
         return userRepository.findByEmail(email).orElseThrow(() -> new NotFoundException("Utente con email " + email + " non trovato!"));
