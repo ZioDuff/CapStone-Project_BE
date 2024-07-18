@@ -35,10 +35,11 @@ public class UserService {
         return userRepository.findAll(pageable);
     }
 
-    public List<User> getArtist(String name) {
+    public List<User> getArtist(String roleName) {
 
-        return userRepository.findByRoleName(name);
+        return userRepository.findByRolesListName(roleName);
     }
+
 
     public User saveUser(UserDTO body) {
         this.userRepository.findByEmail(body.email()).ifPresent(utente -> {

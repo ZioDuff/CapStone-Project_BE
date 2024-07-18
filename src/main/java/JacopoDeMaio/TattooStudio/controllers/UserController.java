@@ -29,9 +29,9 @@ public class UserController {
         return userService.getAllUsers(page, size, sortedBy);
     }
 
-    @GetMapping
-    public List<User> getArtist(@RequestParam String name) {
-        return userService.getArtist(name);
+    @GetMapping("/artists")
+    public List<User> getArtist(@RequestParam String roleName) {
+        return userService.getArtist(roleName);
     }
 
     @GetMapping("/{userId}")

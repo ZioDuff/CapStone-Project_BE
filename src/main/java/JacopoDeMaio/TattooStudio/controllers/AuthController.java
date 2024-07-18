@@ -44,6 +44,6 @@ public class AuthController {
         if (validationResult.hasErrors()) {
             throw new BadRequestException(validationResult.getAllErrors());
         }
-        return new NewUserResponseDTO(this.userService.saveUser(body).getId());
+        return new NewUserResponseDTO(this.userService.adminSaveArtist(body).getId());
     }
 }
