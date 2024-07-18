@@ -37,7 +37,7 @@ public class AuthController {
         return new NewUserResponseDTO(this.userService.saveUser(body).getId());
     }
 
-    @PostMapping("/register")
+    @PostMapping("/register/artist")
     @PreAuthorize("hasAuthority('Admin')")
     @ResponseStatus(HttpStatus.CREATED)
     public NewUserResponseDTO adminSaveTattoArtist(@RequestBody @Validated UserDTO body, BindingResult validationResult) {
