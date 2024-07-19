@@ -36,7 +36,7 @@ public abstract class Generic implements UserDetails {
 
     protected String surname;
 
-    protected String age;
+    protected int age;
 
     @Column(name = "avatar_URL")
     protected String avatarURL;
@@ -47,7 +47,7 @@ public abstract class Generic implements UserDetails {
     @OneToMany(mappedBy = "generic")
     protected List<Reservation> reservations;
 
-    public Generic(String username, String email, String password, String name, String surname, String age, String avatarURL) {
+    public Generic(String username, String email, String password, String name, String surname, int age, String avatarURL) {
         this.username = username;
         this.email = email;
         this.password = password;

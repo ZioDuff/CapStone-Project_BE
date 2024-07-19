@@ -55,6 +55,11 @@ public class GenericService {
         return this.genericRepository.save(tattoArtist);
     }
 
+    public TattoArtist findTattooArtistById(UUID tattooArtistId) {
+        return this.tattooArtistRepository.findById(tattooArtistId).orElseThrow(
+                () -> new NotFoundException("Il tatuatore con id: " + tattooArtistId + " non è stato trovato"));
+    }
+
     public Page<TattoArtist> getAllTattooArtists(int page, int size, String sortedBy) {
         if (size > 10) size = 10;
         Pageable pageable = PageRequest.of(page, size, Sort.by(sortedBy));

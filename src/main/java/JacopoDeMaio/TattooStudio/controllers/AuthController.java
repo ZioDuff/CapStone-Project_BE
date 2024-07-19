@@ -30,7 +30,7 @@ public class AuthController {
         return new GenericLoginResponseDTO(authService.authenticateUtenteAndGenerateToken(payload));
     }
 
-    @PostMapping("/register/users")
+    @PostMapping("/register")
     @ResponseStatus(HttpStatus.CREATED)
     public NewGenericResponseDTO saveUsers(@RequestBody @Validated GenericDTO payload, BindingResult validationResult) {
         if (validationResult.hasErrors()) {

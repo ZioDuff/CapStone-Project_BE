@@ -25,7 +25,7 @@ public class DBInitializer {
                 bCrypt.encode("AldoBaglio"),
                 "Jacopo",
                 "De Maio",
-                "20",
+                24,
                 "https://ui-avatars.com/api/");
 
         if (genericRepository.findByEmail(firstGeneric.getEmail()).isPresent()) {

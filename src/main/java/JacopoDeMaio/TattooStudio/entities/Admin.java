@@ -19,7 +19,7 @@ import java.util.List;
 @ToString
 public class Admin extends Generic {
 
-    public Admin(String username, String email, String password, String name, String surname, String age, String avatarURL) {
+    public Admin(String username, String email, String password, String name, String surname, int age, String avatarURL) {
         super(username, email, password, name, surname, age, avatarURL);
         this.role = Role.ADMIN;
     }

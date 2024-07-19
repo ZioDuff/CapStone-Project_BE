@@ -43,22 +43,5 @@ public class UserController {
         this.userService.findByIdAndDelete(userId);
     }
 
-    //    TODO quello che fa l'user (sicuramente da ultimare)
-
-//    @GetMapping("/me")
-//    public User getOwnProfile(@AuthenticationPrincipal User currentAuthenticatedUser) {
-//        return this.userService.findById(currentAuthenticatedUser.getId());
-//    }
-
-//    @PutMapping("/me")
-//    public User updateOwnProfile(@AuthenticationPrincipal User currentAuthenticatedUser, @RequestBody UserDTO payload) {
-//        return this.userService.findByIdAndUpdate(currentAuthenticatedUser.getId(), payload);
-//    }
-//
-//    @DeleteMapping("/me")
-//    public void deleteOwnProfile(@AuthenticationPrincipal User currentAuthenticatedUser) {
-//        this.userService.findByIdAndDelete(currentAuthenticatedUser.getId());
-//    }
-
 
 }

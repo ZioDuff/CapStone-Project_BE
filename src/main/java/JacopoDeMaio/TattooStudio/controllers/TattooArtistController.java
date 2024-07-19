@@ -13,6 +13,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.UUID;
+
 @RestController
 @RequestMapping("tattooArtists")
 public class TattooArtistController {
@@ -37,6 +39,11 @@ public class TattooArtistController {
             @RequestParam(defaultValue = "id") String sortedBy
     ) {
         return this.genericService.getAllTattooArtists(page, size, sortedBy);
+    }
+
+    @GetMapping("/{tattooArtistId}")
+    public TattoArtist getTattooArtist(@PathVariable UUID tattooArtistId) {
+        return this.genericService.findTattooArtistById(tattooArtistId);
     }
 
 }

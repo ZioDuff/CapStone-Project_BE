@@ -43,6 +43,11 @@ public class UserService {
                 payload.age(),
                 "https://ui-avatars.com/api/" + payload.name() + payload.surname()
         );
+
+        if (payload.age() < 16) {
+            throw new BadRequestException("Devi avere almeno 16 anni per poterti registrare");
+        }
+
         return userRepository.save(newUser);
     }
 

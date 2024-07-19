@@ -2,6 +2,7 @@ package JacopoDeMaio.TattooStudio.payloads.userDTO;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 public record GenericDTO(
@@ -20,12 +21,11 @@ public record GenericDTO(
         @NotEmpty(message = "surname field is required")
         @Size(min = 2, max = 20, message = "surname field is required")
         String surname,
-        @NotEmpty(message = "age field is required")
-        String age,
+        @NotNull(message = "age field is required")
+        int age,
         @Size(min = 15, max = 200, message = "description must be between 15 and 200 characters")
         String description,
-        @Size(min = 10, max = 10, message = "phone Number must have 10 numbers")
-        String phoneNumber
+        int phoneNumber
 
 ) {
 }
