@@ -1,10 +1,12 @@
 package JacopoDeMaio.TattooStudio.controllers;
 
+import JacopoDeMaio.TattooStudio.entities.TattoArtist;
 import JacopoDeMaio.TattooStudio.exceptions.BadRequestException;
 import JacopoDeMaio.TattooStudio.payloads.userDTO.GenericDTO;
 import JacopoDeMaio.TattooStudio.payloads.userDTO.NewGenericResponseDTO;
 import JacopoDeMaio.TattooStudio.services.GenericService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
@@ -27,4 +29,14 @@ public class TattooArtistController {
         }
         return new NewGenericResponseDTO(this.genericService.saveTattooArtist(payload).getId());
     }
+
+    @GetMapping
+    public Page<TattoArtist> getUsersList(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "id") String sortedBy
+    ) {
+        return this.genericService.getAllTattooArtists(page, size, sortedBy);
+    }
+
 }

@@ -6,6 +6,7 @@ import JacopoDeMaio.TattooStudio.exceptions.BadRequestException;
 import JacopoDeMaio.TattooStudio.exceptions.NotFoundException;
 import JacopoDeMaio.TattooStudio.payloads.userDTO.GenericDTO;
 import JacopoDeMaio.TattooStudio.repositories.GenericRepository;
+import JacopoDeMaio.TattooStudio.repositories.TattooArtistRepository;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,8 @@ public class GenericService {
     private PasswordEncoder bCrypt;
     @Autowired
     private Cloudinary cloudinaryUploader;
+    @Autowired
+    private TattooArtistRepository tattooArtistRepository;
 
 
     public TattoArtist saveTattooArtist(GenericDTO payload) {
@@ -52,12 +55,18 @@ public class GenericService {
         return this.genericRepository.save(tattoArtist);
     }
 
-
-    public Page<Generic> getAllUsers(int pageNumber, int pageSize, String sortBy) {
-        if (pageSize > 20) pageSize = 20;
-        Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(sortBy));
-        return genericRepository.findAll(pageable);
+    public Page<TattoArtist> getAllTattooArtists(int page, int size, String sortedBy) {
+        if (size > 10) size = 10;
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sortedBy));
+        return tattooArtistRepository.findAll(pageable);
     }
+
+
+//    public Page<Generic> getAllUsers(int pageNumber, int pageSize, String sortBy) {
+//        if (pageSize > 20) pageSize = 20;
+//        Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(sortBy));
+//        return genericRepository.findAll(pageable);
+//    }
 
     public Generic findById(UUID id) {
         return this.genericRepository.findById(id).orElseThrow(() -> new NotFoundException(id));
