@@ -1,7 +1,7 @@
 package JacopoDeMaio.TattooStudio.security;
 
 
-import JacopoDeMaio.TattooStudio.entities.User;
+import JacopoDeMaio.TattooStudio.entities.Generic;
 import JacopoDeMaio.TattooStudio.exceptions.UnauthorizedException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
@@ -16,11 +16,11 @@ public class JWTTools {
     @Value("${jwt.secret}")
     private String secret;
 
-    public String createToken(User user) {
+    public String createToken(Generic generic) {
         return Jwts.builder()
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24 * 7))
-                .subject(String.valueOf(user.getId()))
+                .subject(String.valueOf(generic.getId()))
                 .signWith(Keys.hmacShaKeyFor(secret.getBytes()))
                 .compact();
 

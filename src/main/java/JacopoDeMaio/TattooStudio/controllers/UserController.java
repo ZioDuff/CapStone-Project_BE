@@ -5,24 +5,60 @@ import JacopoDeMaio.TattooStudio.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/users")
 public class UserController {
-
     @Autowired
     private UserService userService;
 
+//    TODO quello che fa l'admin (sicuramente da ultimare)
 
+    //    GET DI USER SOTTOFORMA DI PAGE
     @GetMapping
-    @PreAuthorize("hasAuthority('Admin')")
-    public Page<User> getUsersList(@RequestParam(defaultValue = "0") int page,
-                                   @RequestParam(defaultValue = "10") int size,
-                                   @RequestParam(defaultValue = "id") String sortedBy) {
-        return userService.getAllUsers(page, size, sortedBy);
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public Page<User> getUsersList(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "id") String sortedBy
+    ) {
+        return this.userService.getAllUsers(page, size, sortedBy);
     }
+
+
+    //    GET SUL SINGOLO UTENTE
+    @GetMapping("/{userId}")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public User getUser(@PathVariable UUID userId) {
+        return this.userService.findById(userId);
+    }
+
+    //    ELIMINAZIONE DEL SINGOLO UTENTE
+    @DeleteMapping("/{userId}")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public void deleteUser(@PathVariable UUID userId) {
+        this.userService.findByIdAndDelete(userId);
+    }
+
+    //    TODO quello che fa l'user (sicuramente da ultimare)
+
+//    @GetMapping("/me")
+//    public User getOwnProfile(@AuthenticationPrincipal User currentAuthenticatedUser) {
+//        return this.userService.findById(currentAuthenticatedUser.getId());
+//    }
+
+//    @PutMapping("/me")
+//    public User updateOwnProfile(@AuthenticationPrincipal User currentAuthenticatedUser, @RequestBody UserDTO payload) {
+//        return this.userService.findByIdAndUpdate(currentAuthenticatedUser.getId(), payload);
+//    }
+//
+//    @DeleteMapping("/me")
+//    public void deleteOwnProfile(@AuthenticationPrincipal User currentAuthenticatedUser) {
+//        this.userService.findByIdAndDelete(currentAuthenticatedUser.getId());
+//    }
+
+
 }

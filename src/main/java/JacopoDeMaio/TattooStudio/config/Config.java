@@ -13,8 +13,8 @@ import java.util.Map;
 public class Config {
     @Bean
     public Cloudinary uploader(@Value("${CLOUD_NAME}") String name,
-                               @Value("${CLOUD_KEY}") String secret,
-                               @Value("${CLOUD_SECRET}") String key) {
+                               @Value("${CLOUD_KEY}") String key,
+                               @Value("${CLOUD_SECRET}") String secret) {
         Map<String, String> configuration = new HashMap<>();
         configuration.put("cloud_name", name);
         configuration.put("api_key", key);

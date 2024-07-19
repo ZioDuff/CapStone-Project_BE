@@ -1,7 +1,10 @@
 package JacopoDeMaio.TattooStudio.services;
 
 import JacopoDeMaio.TattooStudio.entities.User;
+import JacopoDeMaio.TattooStudio.exceptions.BadRequestException;
 import JacopoDeMaio.TattooStudio.exceptions.NotFoundException;
+import JacopoDeMaio.TattooStudio.payloads.userDTO.GenericDTO;
+import JacopoDeMaio.TattooStudio.repositories.GenericRepository;
 import JacopoDeMaio.TattooStudio.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -19,67 +22,56 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
     @Autowired
-    private PasswordEncoder bCrypt;
+    private GenericRepository genericRepository;
     @Autowired
-    private RoleService roleService;
+    private PasswordEncoder bCrypt;
 
 
-    public Page<User> getAllUsers(int pageNumber, int pageSize, String sortBy) {
-        if (pageSize > 20) pageSize = 20;
-        Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(sortBy));
+    public User saveUser(GenericDTO payload) {
+        this.genericRepository.findByEmail(payload.email()).ifPresent(generic -> {
+            throw new BadRequestException("L'email: " + payload.email() + " è gia in uso");
+        });
+        this.genericRepository.findByUsername(payload.username()).ifPresent(generic -> {
+            throw new BadRequestException("L'username: " + payload.username() + " è gia in uso");
+        });
+        User newUser = new User(
+                payload.username(),
+                payload.email(),
+                bCrypt.encode(payload.password()),
+                payload.name(),
+                payload.surname(),
+                payload.age(),
+                "https://ui-avatars.com/api/" + payload.name() + payload.surname()
+        );
+        return userRepository.save(newUser);
+    }
+
+    public Page<User> getAllUsers(int page, int size, String sortedBy) {
+        if (size > 10) size = 10;
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sortedBy));
         return userRepository.findAll(pageable);
     }
 
-//    public User saveUser(UserDTO body) {
-//        this.userRepository.findByEmail(body.email()).ifPresent(utente -> {
-//            throw new BadRequestException("The user with email: " + body.email() + ", already exist.");
-//        });
-//
-//
-//        //TODO 1 - SISTEMARE RUOLO DEFAULT
-//
-////        User user = new User(body.username(), body.email(), bCrypt.encode(body.password()), body.name(), body.surname());
-//////        Role foundRole = roleService.findByRoleName("User");
-////
-////        List<Role> roleList = new ArrayList<>();
-////
-//////        roleList.add(foundRole);
-////
-////        user.setRolesList(roleList);
-//
-////        return this.userRepository.save();
-//    }
+    public User findById(UUID userId) {
+        return this.userRepository.findById(userId).orElseThrow(
+                () -> new NotFoundException("l'utente con id: " + userId + " non è stato torvato")
+        );
+    }
 
+    //
 //    public User findByIdAndUpdate(UUID id, UserDTO payload) {
+//
 //        User found = this.findById(id);
 //        found.setUsername(payload.username());
 //        found.setName(payload.name());
 //        found.setSurname(payload.surname());
-//        found.setEmail(payload.email());
-//        found.setPassword(payload.password());
 //        return userRepository.save(found);
 //    }
-
-//    public void findByIdAndDelete(UUID id) {
-//        User found = this.findById(id);
-//        this.userRepository.delete(found);
-//    }
-
-
-    public User findById(UUID id) {
-        return this.userRepository.findById(id).orElseThrow(() -> new NotFoundException(id));
-    }
-
-//    public User addRoles(UUID id, RoleAssignedDTO roleId) {
-//        User found = this.findById(id);
-//        Role role = this.roleService.findById(roleId.id());
-//        found.getRolesList().add(role);
 //
-//        return this.userRepository.save(found);
-//    }
-
-    public User findByEmail(String email) {
-        return userRepository.findByEmail(email).orElseThrow(() -> new NotFoundException("Utente con email " + email + " non trovato!"));
+    public void findByIdAndDelete(UUID userid) {
+        User found = this.findById(userid);
+        this.userRepository.delete(found);
     }
+
 
 }

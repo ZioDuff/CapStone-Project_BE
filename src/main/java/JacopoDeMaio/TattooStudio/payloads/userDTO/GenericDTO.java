@@ -4,9 +4,7 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 
-import java.util.UUID;
-
-public record UserDTO(
+public record GenericDTO(
         @NotEmpty(message = "Username field is required")
         @Size(min = 4, max = 20, message = "The username must be between 4 and 20 characters")
         String username,
@@ -22,6 +20,12 @@ public record UserDTO(
         @NotEmpty(message = "surname field is required")
         @Size(min = 2, max = 20, message = "surname field is required")
         String surname,
-        UUID roleId
+        @NotEmpty(message = "age field is required")
+        String age,
+        @Size(min = 15, max = 200, message = "description must be between 15 and 200 characters")
+        String description,
+        @Size(min = 10, max = 10, message = "phone Number must have 10 numbers")
+        String phoneNumber
+
 ) {
 }

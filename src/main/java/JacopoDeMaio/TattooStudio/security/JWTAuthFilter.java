@@ -1,9 +1,9 @@
 package JacopoDeMaio.TattooStudio.security;
 
 
-import JacopoDeMaio.TattooStudio.entities.User;
+import JacopoDeMaio.TattooStudio.entities.Generic;
 import JacopoDeMaio.TattooStudio.exceptions.UnauthorizedException;
-import JacopoDeMaio.TattooStudio.services.UserService;
+import JacopoDeMaio.TattooStudio.services.GenericService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -25,7 +25,7 @@ public class JWTAuthFilter extends OncePerRequestFilter {
     @Autowired
     private JWTTools jwtTools;
     @Autowired
-    private UserService userService;
+    private GenericService genericService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -40,9 +40,9 @@ public class JWTAuthFilter extends OncePerRequestFilter {
         jwtTools.verifyToken(accessToken);
 
         String utentiId = jwtTools.extractIdFromToken(accessToken);
-        User currentUser = userService.findById(UUID.fromString(utentiId));
+        Generic currentGeneric = genericService.findById(UUID.fromString(utentiId));
 
-        Authentication authentication = new UsernamePasswordAuthenticationToken(currentUser, null, currentUser.getAuthorities());
+        Authentication authentication = new UsernamePasswordAuthenticationToken(currentGeneric, null, currentGeneric.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         filterChain.doFilter(request, response);
@@ -50,6 +50,6 @@ public class JWTAuthFilter extends OncePerRequestFilter {
 
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
-        return new AntPathMatcher().match("/auth/login", request.getServletPath());
+        return new AntPathMatcher().match("/auth/**", request.getServletPath());
     }
 }
