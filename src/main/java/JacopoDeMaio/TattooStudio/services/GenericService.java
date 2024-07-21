@@ -19,6 +19,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.Period;
 import java.util.UUID;
 
 @Service
@@ -33,6 +35,15 @@ public class GenericService {
     @Autowired
     private TattooArtistRepository tattooArtistRepository;
 
+    public int calculateAge(LocalDate dateOfBirth) {
+        LocalDate currentDate = LocalDate.now();
+        if (dateOfBirth != null) {
+            return Period.between(dateOfBirth, currentDate).getYears();
+        } else {
+            return 0;
+        }
+    }
+
 
     public TattoArtist saveTattooArtist(GenericDTO payload) {
         this.genericRepository.findByEmail(payload.email()).ifPresent(generic -> {
@@ -41,13 +52,16 @@ public class GenericService {
         this.genericRepository.findByUsername(payload.username()).ifPresent(generic -> {
             throw new BadRequestException("L'username: " + payload.username() + " è gia in uso");
         });
+        this.tattooArtistRepository.findByPhoneNumber(payload.phoneNumber()).ifPresent(tattoArtist -> {
+            throw new BadRequestException("Il numero: " + payload.phoneNumber() + " è gia associato ad un account");
+        });
         TattoArtist tattoArtist = new TattoArtist(
                 payload.username(),
                 payload.email(),
                 bCrypt.encode(payload.password()),
                 payload.name(),
                 payload.surname(),
-                payload.age(),
+                calculateAge(payload.dateOfBirth()),
                 "https://ui-avatars.com/api/" + payload.name() + payload.surname(),
                 payload.description(),
                 payload.phoneNumber()
@@ -66,12 +80,6 @@ public class GenericService {
         return tattooArtistRepository.findAll(pageable);
     }
 
-
-//    public Page<Generic> getAllUsers(int pageNumber, int pageSize, String sortBy) {
-//        if (pageSize > 20) pageSize = 20;
-//        Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(sortBy));
-//        return genericRepository.findAll(pageable);
-//    }
 
     public Generic findById(UUID id) {
         return this.genericRepository.findById(id).orElseThrow(() -> new NotFoundException(id));

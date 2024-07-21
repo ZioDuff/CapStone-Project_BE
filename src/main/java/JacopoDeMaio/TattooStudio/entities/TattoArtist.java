@@ -23,12 +23,12 @@ public class TattoArtist extends Generic {
 
     private String description;
 
-    private int phoneNumber;
+    private String phoneNumber;
 
     @OneToMany(mappedBy = "tattooArtist")
     private Set<Tattoo> tattoos;
 
-    public TattoArtist(String username, String email, String password, String name, String surname, int age, String avatarURL, String description, int phoneNumber) {
+    public TattoArtist(String username, String email, String password, String name, String surname, int age, String avatarURL, String description, String phoneNumber) {
         super(username, email, password, name, surname, age, avatarURL);
         this.role = Role.TATTOOARTIST;
         this.description = description;

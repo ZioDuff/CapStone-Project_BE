@@ -14,6 +14,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.Period;
 import java.util.UUID;
 
 @Service
@@ -25,6 +27,15 @@ public class UserService {
     private GenericRepository genericRepository;
     @Autowired
     private PasswordEncoder bCrypt;
+
+    public int calculateAge(LocalDate dateOfBirth) {
+        LocalDate currentDate = LocalDate.now();
+        if (dateOfBirth != null) {
+            return Period.between(dateOfBirth, currentDate).getYears();
+        } else {
+            return 0;
+        }
+    }
 
 
     public User saveUser(GenericDTO payload) {
@@ -40,11 +51,11 @@ public class UserService {
                 bCrypt.encode(payload.password()),
                 payload.name(),
                 payload.surname(),
-                payload.age(),
+                calculateAge(payload.dateOfBirth()),
                 "https://ui-avatars.com/api/" + payload.name() + payload.surname()
         );
 
-        if (payload.age() < 16) {
+        if (calculateAge(payload.dateOfBirth()) < 16) {
             throw new BadRequestException("Devi avere almeno 16 anni per poterti registrare");
         }
 
@@ -68,7 +79,6 @@ public class UserService {
         User found = this.findById(userid);
         this.userRepository.delete(found);
     }
-
 
 
 }
