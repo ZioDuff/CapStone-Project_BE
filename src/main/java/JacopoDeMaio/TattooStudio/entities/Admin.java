@@ -17,11 +17,11 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @ToString
-public class User extends Generic {
+public class Admin extends Generic {
 
-    public User(String username, String email, String password, String name, String surname, int age, String avatarURL) {
+    public Admin(String username, String email, String password, String name, String surname, int age, String avatarURL) {
         super(username, email, password, name, surname, age, avatarURL);
-        this.role = Role.USER;
+        this.role = Role.ADMIN;
     }
 
     @Override

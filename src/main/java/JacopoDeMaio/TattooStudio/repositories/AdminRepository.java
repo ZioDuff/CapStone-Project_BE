@@ -1,14 +1,11 @@
 package JacopoDeMaio.TattooStudio.repositories;
 
-import JacopoDeMaio.TattooStudio.entities.Role;
+import JacopoDeMaio.TattooStudio.entities.Admin;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.Optional;
 import java.util.UUID;
 
 @Repository
-public interface RoleRepository extends JpaRepository<Role, UUID> {
-    Optional<Role> findByName(String name);
-
+public interface AdminRepository extends JpaRepository<Admin, UUID> {
 }

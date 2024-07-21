@@ -2,11 +2,10 @@ package JacopoDeMaio.TattooStudio.payloads.userDTO;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
-import java.util.UUID;
-
-public record UserDTO(
+public record GenericDTO(
         @NotEmpty(message = "Username field is required")
         @Size(min = 4, max = 20, message = "The username must be between 4 and 20 characters")
         String username,
@@ -22,6 +21,11 @@ public record UserDTO(
         @NotEmpty(message = "surname field is required")
         @Size(min = 2, max = 20, message = "surname field is required")
         String surname,
-        UUID roleId
+        @NotNull(message = "age field is required")
+        int age,
+        @Size(min = 15, max = 200, message = "description must be between 15 and 200 characters")
+        String description,
+        int phoneNumber
+
 ) {
 }

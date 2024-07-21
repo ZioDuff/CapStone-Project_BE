@@ -1,12 +1,11 @@
 package JacopoDeMaio.TattooStudio.repositories;
 
-import JacopoDeMaio.TattooStudio.entities.User;
+import JacopoDeMaio.TattooStudio.entities.TattoArtist;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.UUID;
 
 @Repository
-public interface UserRepository extends JpaRepository<User, UUID> {
-
+public interface TattooArtistRepository extends JpaRepository<TattoArtist, UUID> {
 }
