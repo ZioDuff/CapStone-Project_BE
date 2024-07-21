@@ -44,7 +44,7 @@ public class GenericService {
         TattoArtist tattoArtist = new TattoArtist(
                 payload.username(),
                 payload.email(),
-                payload.password(),
+                bCrypt.encode(payload.password()),
                 payload.name(),
                 payload.surname(),
                 payload.age(),
