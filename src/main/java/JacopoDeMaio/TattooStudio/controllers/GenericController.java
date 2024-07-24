@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/generics")
@@ -40,9 +39,9 @@ public class GenericController {
         return this.genericService.findById(currentAuthenticatedUser.getId());
     }
 
-    @PatchMapping("/{genericId}/avatar")
-    public String uploadAvatar(@RequestParam("avatar") MultipartFile image, @PathVariable UUID genericId) throws IOException {
-        return genericService.uploadImage(image, genericId);
+    @PatchMapping("/me/avatar")
+    public String uploadAvatar(@RequestParam("avatar") MultipartFile image, @AuthenticationPrincipal Generic currentAuthenticatedUser) throws IOException {
+        return genericService.uploadImage(image, currentAuthenticatedUser.getId());
     }
 
     @PutMapping("/me")
