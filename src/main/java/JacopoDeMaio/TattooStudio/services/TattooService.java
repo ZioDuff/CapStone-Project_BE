@@ -6,6 +6,7 @@ import JacopoDeMaio.TattooStudio.payloads.TattooDTO;
 import JacopoDeMaio.TattooStudio.repositories.TattooRepository;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -25,8 +26,10 @@ public class TattooService {
     @Autowired
     private GenericService genericService;
 
-    public String uploadTattooImage(MultipartFile file, TattooDTO payload, UUID tattooArtistId) throws IOException {
+    public String uploadTattooImage(MultipartFile file, String payloadToString, UUID tattooArtistId) throws IOException {
         String img = (String) cloudinaryUploader.uploader().upload(file.getBytes(), ObjectUtils.emptyMap()).get("url");
+        ObjectMapper objectMapper = new ObjectMapper();
+        TattooDTO payload = objectMapper.readValue(payloadToString, TattooDTO.class);
         Tattoo newTattoo = new Tattoo(
                 img, payload.name(), payload.description()
         );

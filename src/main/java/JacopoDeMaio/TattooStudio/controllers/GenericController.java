@@ -2,7 +2,6 @@ package JacopoDeMaio.TattooStudio.controllers;
 
 import JacopoDeMaio.TattooStudio.entities.Generic;
 import JacopoDeMaio.TattooStudio.exceptions.BadRequestException;
-import JacopoDeMaio.TattooStudio.payloads.TattooDTO;
 import JacopoDeMaio.TattooStudio.payloads.userDTO.GenericDTO;
 import JacopoDeMaio.TattooStudio.payloads.userDTO.NewGenericResponseDTO;
 import JacopoDeMaio.TattooStudio.services.GenericService;
@@ -49,8 +48,11 @@ public class GenericController {
     }
 
     @PostMapping("me/newTattoo")
-    public String uploadTattoo(@RequestParam("newTattoo") MultipartFile image, @AuthenticationPrincipal Generic currentAuthenticatedUser, TattooDTO payload) throws IOException {
-        return tattooService.uploadTattooImage(image, payload, currentAuthenticatedUser.getId());
+    public String uploadTattoo(@RequestParam("newTattoo") MultipartFile image,
+                               @AuthenticationPrincipal Generic currentAuthenticatedUser,
+                               @RequestParam("payload") String tattooPayload) throws IOException {
+
+        return tattooService.uploadTattooImage(image, tattooPayload, currentAuthenticatedUser.getId());
     }
 
     @PutMapping("/me")

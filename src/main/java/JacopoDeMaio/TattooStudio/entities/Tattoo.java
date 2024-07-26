@@ -1,7 +1,11 @@
 package JacopoDeMaio.TattooStudio.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.UUID;
 
@@ -10,7 +14,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @NoArgsConstructor
-@ToString
+
 public class Tattoo {
 
     @Id
@@ -25,6 +29,7 @@ public class Tattoo {
 
     private String description;
 
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "tattooArtist_Id")
     private TattoArtist tattooArtist;
@@ -33,5 +38,15 @@ public class Tattoo {
         this.tattoURL = tattoURL;
         this.name = name;
         this.description = description;
+    }
+
+    @Override
+    public String toString() {
+        return "Tattoo{" +
+                "id=" + id +
+                ", tattoURL='" + tattoURL + '\'' +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                '}';
     }
 }
