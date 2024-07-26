@@ -29,4 +29,9 @@ public class Tattoo {
     @JoinColumn(name = "tattooArtist_Id")
     private TattoArtist tattooArtist;
 
+    public Tattoo(String tattoURL, String name, String description) {
+        this.tattoURL = tattoURL;
+        this.name = name;
+        this.description = description;
+    }
 }

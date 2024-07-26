@@ -2,9 +2,11 @@ package JacopoDeMaio.TattooStudio.controllers;
 
 import JacopoDeMaio.TattooStudio.entities.Generic;
 import JacopoDeMaio.TattooStudio.exceptions.BadRequestException;
+import JacopoDeMaio.TattooStudio.payloads.TattooDTO;
 import JacopoDeMaio.TattooStudio.payloads.userDTO.GenericDTO;
 import JacopoDeMaio.TattooStudio.payloads.userDTO.NewGenericResponseDTO;
 import JacopoDeMaio.TattooStudio.services.GenericService;
+import JacopoDeMaio.TattooStudio.services.TattooService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -22,6 +24,8 @@ public class GenericController {
 
     @Autowired
     private GenericService genericService;
+    @Autowired
+    private TattooService tattooService;
 
     @PostMapping("enroll/tattooArtist")
     @PreAuthorize("hasAuthority('ADMIN')")
@@ -42,6 +46,11 @@ public class GenericController {
     @PatchMapping("/me/avatar")
     public String uploadAvatar(@RequestParam("avatar") MultipartFile image, @AuthenticationPrincipal Generic currentAuthenticatedUser) throws IOException {
         return genericService.uploadImage(image, currentAuthenticatedUser.getId());
+    }
+
+    @PostMapping("me/newTattoo")
+    public String uploadTattoo(@RequestParam("newTattoo") MultipartFile image, @AuthenticationPrincipal Generic currentAuthenticatedUser, TattooDTO payload) throws IOException {
+        return tattooService.uploadTattooImage(image, payload, currentAuthenticatedUser.getId());
     }
 
     @PutMapping("/me")
