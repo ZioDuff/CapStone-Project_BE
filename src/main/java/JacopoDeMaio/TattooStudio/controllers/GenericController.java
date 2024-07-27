@@ -5,6 +5,7 @@ import JacopoDeMaio.TattooStudio.exceptions.BadRequestException;
 import JacopoDeMaio.TattooStudio.payloads.userDTO.GenericDTO;
 import JacopoDeMaio.TattooStudio.payloads.userDTO.NewGenericResponseDTO;
 import JacopoDeMaio.TattooStudio.services.GenericService;
+import JacopoDeMaio.TattooStudio.services.TattooArtistService;
 import JacopoDeMaio.TattooStudio.services.TattooService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/generics")
@@ -25,6 +27,8 @@ public class GenericController {
     private GenericService genericService;
     @Autowired
     private TattooService tattooService;
+    @Autowired
+    private TattooArtistService tattooArtistService;
 
     @PostMapping("enroll/tattooArtist")
     @PreAuthorize("hasAuthority('ADMIN')")
@@ -63,6 +67,12 @@ public class GenericController {
     @DeleteMapping("/me")
     public void deleteOwnProfile(@AuthenticationPrincipal Generic currentAuthenticatedUser) {
         this.genericService.findByIdAndDelete(currentAuthenticatedUser.getId());
+    }
+
+    @DeleteMapping("/delete/{tattooArtistId}")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public void deleteTattooArtist(@PathVariable UUID tattooArtistId) {
+        this.tattooArtistService.deleteTattooArtistById(tattooArtistId);
     }
 
 
