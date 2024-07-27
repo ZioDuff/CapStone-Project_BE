@@ -8,6 +8,10 @@ import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -38,5 +42,11 @@ public class TattooService {
 
         this.tattooRepository.save(newTattoo);
         return img;
+    }
+
+    public Page<Tattoo> getAllTattoos(int page, int size, String sortedBy) {
+        if (size > 10) size = 10;
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sortedBy));
+        return tattooRepository.findAll(pageable);
     }
 }
