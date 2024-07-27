@@ -1,6 +1,7 @@
 package JacopoDeMaio.TattooStudio.entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -14,7 +15,6 @@ import java.util.UUID;
 @Getter
 @Setter
 @NoArgsConstructor
-
 public class Tattoo {
 
     @Id
@@ -29,6 +29,7 @@ public class Tattoo {
 
     private String description;
 
+    @JsonIgnore
     @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "tattooArtist_Id")
