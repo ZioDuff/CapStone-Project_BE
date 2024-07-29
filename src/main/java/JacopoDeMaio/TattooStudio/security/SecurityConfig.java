@@ -41,7 +41,7 @@ public class SecurityConfig {
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("https://tattoo-studio-react-2024-chh1mcqe0-jacopos-projects-c922c2c8.vercel.app/"));
+        configuration.setAllowedOrigins(Arrays.asList("https://tattoo-studio-react-2024.vercel.app/"));
         // whitelist dei frontend che possono accedere a questo backend
         configuration.setAllowedMethods(Arrays.asList("*"));
         configuration.setAllowedHeaders(Arrays.asList("*"));
