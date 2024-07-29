@@ -2,11 +2,13 @@ package JacopoDeMaio.TattooStudio.services;
 
 import JacopoDeMaio.TattooStudio.entities.Generic;
 import JacopoDeMaio.TattooStudio.entities.TattoArtist;
+import JacopoDeMaio.TattooStudio.entities.Tattoo;
 import JacopoDeMaio.TattooStudio.exceptions.BadRequestException;
 import JacopoDeMaio.TattooStudio.exceptions.NotFoundException;
 import JacopoDeMaio.TattooStudio.payloads.userDTO.GenericDTO;
 import JacopoDeMaio.TattooStudio.repositories.GenericRepository;
 import JacopoDeMaio.TattooStudio.repositories.TattooArtistRepository;
+import JacopoDeMaio.TattooStudio.repositories.TattooRepository;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +36,8 @@ public class GenericService {
     private Cloudinary cloudinaryUploader;
     @Autowired
     private TattooArtistRepository tattooArtistRepository;
+    @Autowired
+    private TattooRepository tattooRepository;
 
     public int calculateAge(LocalDate dateOfBirth) {
         LocalDate currentDate = LocalDate.now();
@@ -119,4 +123,21 @@ public class GenericService {
         this.genericRepository.delete(found);
     }
 
+    public void findTattooArtistAndDeleteTattoo(UUID tattooArtistId, UUID tattooId) {
+        TattoArtist artistFound = this.findTattooArtistById(tattooArtistId);
+        Tattoo tattooFound = this.tattooRepository.findById(tattooId)
+                .orElseThrow(() -> new NotFoundException("Il tatuaggio con id:" + tattooId + " non è stato trovato"));
+
+        if (artistFound != null && tattooFound != null) {
+            if (tattooFound.getTattooArtist().getId().equals(artistFound.getId())) {
+                tattooRepository.delete(tattooFound);
+            } else {
+                throw new IllegalArgumentException("L'artista non può eliminare i tatuaggi di un altro artista");
+            }
+        } else {
+            throw new IllegalArgumentException("Artista o tatuaggio non trovato");
+        }
+
+    }
 }
+
