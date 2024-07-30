@@ -1,7 +1,6 @@
 package JacopoDeMaio.TattooStudio.controllers;
 
 import JacopoDeMaio.TattooStudio.entities.Generic;
-import JacopoDeMaio.TattooStudio.entities.TattoArtist;
 import JacopoDeMaio.TattooStudio.exceptions.BadRequestException;
 import JacopoDeMaio.TattooStudio.payloads.userDTO.GenericDTO;
 import JacopoDeMaio.TattooStudio.payloads.userDTO.NewGenericResponseDTO;
@@ -60,8 +59,8 @@ public class GenericController {
         return tattooService.uploadTattooImage(image, tattooPayload, currentAuthenticatedUser.getId());
     }
 
-    @DeleteMapping("me/delete/tattoo/{tattooId}")
-    public void deleteOwnTattoo(@PathVariable UUID tattooId, @AuthenticationPrincipal TattoArtist currentAuthenticatedUser) {
+    @DeleteMapping("/me/tattoo/{tattooId}")
+    public void deleteOwnTattoo(@PathVariable UUID tattooId, @AuthenticationPrincipal Generic currentAuthenticatedUser) {
         this.genericService.findTattooArtistAndDeleteTattoo(currentAuthenticatedUser.getId(), tattooId);
 
     }
@@ -76,7 +75,7 @@ public class GenericController {
         this.genericService.findByIdAndDelete(currentAuthenticatedUser.getId());
     }
 
-    @DeleteMapping("/delete/tattooArtist/{tattooArtistId}")
+    @DeleteMapping("/delete/{tattooArtistId}")
     @PreAuthorize("hasAuthority('ADMIN')")
     public void deleteTattooArtist(@PathVariable UUID tattooArtistId) {
         this.tattooArtistService.deleteTattooArtistById(tattooArtistId);
