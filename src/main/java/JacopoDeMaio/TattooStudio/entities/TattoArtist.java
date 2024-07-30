@@ -1,7 +1,8 @@
 package JacopoDeMaio.TattooStudio.entities;
 
 import JacopoDeMaio.TattooStudio.enums.Role;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
@@ -19,15 +20,16 @@ import java.util.Set;
 @Getter
 @Setter
 @NoArgsConstructor
-
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class TattoArtist extends Generic {
 
     private String description;
 
     private String phoneNumber;
 
-    @JsonManagedReference
+
     @OneToMany(mappedBy = "tattooArtist", cascade = CascadeType.ALL, orphanRemoval = true)
+
     private Set<Tattoo> tattoos;
 
     public TattoArtist(String username, String email, String password, String name, String surname, int age, String avatarURL, String description, String phoneNumber) {
