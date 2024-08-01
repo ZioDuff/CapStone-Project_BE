@@ -24,14 +24,14 @@ public class Reservation {
     @GeneratedValue
     private UUID id;
 
-    @Column(name = "data_prenotazione")
+    @Column(name = "date_reservation")
     private LocalDate dateReservation;
 
-    @Column(name = "ora_prenotazione")
+    @Column(name = "time_reservation")
     private LocalTime timeReservation;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "tipo_di_prenotazione")
+    @Column(name = "type_reservation")
     private TypeReservation typeReservation;
 
     @ManyToOne
