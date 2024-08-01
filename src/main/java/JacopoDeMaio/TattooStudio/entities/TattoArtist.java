@@ -29,8 +29,11 @@ public class TattoArtist extends Generic {
 
 
     @OneToMany(mappedBy = "tattooArtist", cascade = CascadeType.ALL, orphanRemoval = true)
-
     private Set<Tattoo> tattoos;
+
+    @OneToMany(mappedBy = "tattoArtist")
+    private List<Reservation> reservations;
+
 
     public TattoArtist(String username, String email, String password, String name, String surname, int age, String avatarURL, String description, String phoneNumber) {
         super(username, email, password, name, surname, age, avatarURL);
