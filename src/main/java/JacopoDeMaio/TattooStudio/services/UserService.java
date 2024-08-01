@@ -74,6 +74,10 @@ public class UserService {
         );
     }
 
+    public User findUserByUsername(String username) {
+        return this.userRepository.findByUsername(username);
+    }
+
 
     public void findByIdAndDelete(UUID userid) {
         User found = this.findById(userid);

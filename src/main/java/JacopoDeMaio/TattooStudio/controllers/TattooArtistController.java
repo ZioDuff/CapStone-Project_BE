@@ -17,7 +17,7 @@ public class TattooArtistController {
 
 
     @GetMapping
-    public Page<TattoArtist> getUsersList(
+    public Page<TattoArtist> getTattooArtistsList(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(defaultValue = "id") String sortedBy

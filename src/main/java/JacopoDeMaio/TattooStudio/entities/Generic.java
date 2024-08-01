@@ -45,7 +45,8 @@ public abstract class Generic implements UserDetails {
     protected Role role;
 
     @OneToMany(mappedBy = "generic")
-    protected List<Reservation> reservations;
+    private List<Reservation> reservations;
+
 
     public Generic(String username, String email, String password, String name, String surname, int age, String avatarURL) {
         this.username = username;
