@@ -74,6 +74,9 @@ public class ReservationService {
         userFound.getReservations().add(reservation);
         tattooArtistFound.getReservations().add(reservation);
 
+        System.out.println("Saved Reservation for User: " + userFound.getReservations());
+        System.out.println("Saved Reservation for Artist: " + tattooArtistFound.getReservations());
+
 
         Reservation savedReservation = this.reservationRepository.save(reservation);
         return new ResevationResponseDTO(
