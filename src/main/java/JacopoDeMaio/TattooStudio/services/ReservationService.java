@@ -35,6 +35,14 @@ public class ReservationService {
     @Autowired
     private UserService userService;
 
+    private TypeReservation convertStringToTypeReservation(String type) {
+        try {
+            return TypeReservation.valueOf(type.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            throw new BadRequestException("The selected staff type don't exists");
+        }
+    }
+
     public Reservation findById(UUID reservationId) {
         return this.reservationRepository.findById(reservationId).orElseThrow(() -> new NotFoundException(reservationId));
     }
@@ -55,13 +63,13 @@ public class ReservationService {
 
     public ResevationResponseDTO saveReservation(ReservationDTO payload, UUID userId) {
         User userFound = (User) this.genericService.findById(userId);
-        TattoArtist tattooArtistFound = this.genericService.findTattooArtistById(payload.tattooArtistId());
+        TattoArtist tattooArtistFound = this.genericService.findByUsername(payload.tattooArtistUsername());
 
 
         Reservation reservation = new Reservation(
                 payload.dateReservation(),
                 payload.timeReservation(),
-                TypeReservation.CONSULTATION,
+                convertStringToTypeReservation("CONSULTATION"),
                 userFound,
                 tattooArtistFound
         );
@@ -79,7 +87,7 @@ public class ReservationService {
         return new ResevationResponseDTO(
                 savedReservation.getDateReservation(),
                 savedReservation.getTimeReservation(),
-                savedReservation.getTypeReservation(),
+                savedReservation.getTypeReservation().name(),
                 savedReservation.getTattoArtist().getUsername()
 
         );

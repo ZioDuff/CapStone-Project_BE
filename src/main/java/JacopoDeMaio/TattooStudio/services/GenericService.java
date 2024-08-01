@@ -139,5 +139,10 @@ public class GenericService {
         }
 
     }
+
+    public TattoArtist findByUsername(String username) {
+        return (TattoArtist) this.genericRepository.findByUsername(username)
+                .orElseThrow(() -> new NotFoundException("non è stato trovato nessuno con userName: " + username));
+    }
 }
 

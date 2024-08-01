@@ -26,7 +26,7 @@ public class ReservationController {
     private ReservationService reservationService;
 
 
-    @GetMapping("/me")
+    @GetMapping
     public Page<Reservation> getReservationList(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,

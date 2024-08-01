@@ -10,4 +10,5 @@ import java.util.UUID;
 @Repository
 public interface TattooArtistRepository extends JpaRepository<TattoArtist, UUID> {
     Optional<TattoArtist> findByPhoneNumber(String phoneNumber);
+
 }

@@ -12,6 +12,7 @@ import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
@@ -32,7 +33,7 @@ public class TattoArtist extends Generic {
     private Set<Tattoo> tattoos;
 
     @OneToMany(mappedBy = "tattoArtist")
-    private List<Reservation> reservations;
+    private List<Reservation> reservations = new ArrayList<>();
 
 
     public TattoArtist(String username, String email, String password, String name, String surname, int age, String avatarURL, String description, String phoneNumber) {
