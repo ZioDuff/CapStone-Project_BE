@@ -1,8 +1,6 @@
 package JacopoDeMaio.TattooStudio.entities;
 
 import JacopoDeMaio.TattooStudio.enums.Role;
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
@@ -12,7 +10,6 @@ import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
@@ -21,7 +18,6 @@ import java.util.Set;
 @Getter
 @Setter
 @NoArgsConstructor
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class TattoArtist extends Generic {
 
     private String description;
@@ -31,9 +27,6 @@ public class TattoArtist extends Generic {
 
     @OneToMany(mappedBy = "tattooArtist", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Tattoo> tattoos;
-
-    @OneToMany(mappedBy = "tattoArtist")
-    private List<Reservation> reservations = new ArrayList<>();
 
 
     public TattoArtist(String username, String email, String password, String name, String surname, int age, String avatarURL, String description, String phoneNumber) {

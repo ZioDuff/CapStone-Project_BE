@@ -2,7 +2,6 @@ package JacopoDeMaio.TattooStudio.entities;
 
 import JacopoDeMaio.TattooStudio.enums.TypeReservation;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -36,12 +35,10 @@ public class Reservation {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    @JsonIgnoreProperties("reservations")
     private User user;
 
     @ManyToOne
     @JoinColumn(name = "tattooArtist_id")
-    @JsonIgnoreProperties("reservations")
     private TattoArtist tattoArtist;
 
 

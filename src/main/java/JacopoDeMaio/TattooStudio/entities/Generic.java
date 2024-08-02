@@ -53,6 +53,21 @@ public abstract class Generic implements UserDetails {
         this.age = age;
         this.avatarURL = avatarURL;
     }
+
+    @Override
+    public String toString() {
+        return "Generic{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", name='" + name + '\'' +
+                ", surname='" + surname + '\'' +
+                ", age=" + age +
+                ", avatarURL='" + avatarURL + '\'' +
+                ", role=" + role +
+                '}';
+    }
 }
 
 

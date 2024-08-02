@@ -17,4 +17,5 @@ public interface ReservationRepository extends JpaRepository<Reservation, UUID> 
     List<Reservation> findByDateReservationAndTattoArtistId(LocalDate date, UUID tattooArtistId);
 
 
+    List<Reservation> findByUserId(UUID userId);
 }

@@ -3,9 +3,7 @@ package JacopoDeMaio.TattooStudio.controllers;
 import JacopoDeMaio.TattooStudio.entities.Generic;
 import JacopoDeMaio.TattooStudio.entities.Reservation;
 import JacopoDeMaio.TattooStudio.payloads.ReservationDTO;
-import JacopoDeMaio.TattooStudio.payloads.ResevationResponseDTO;
 import JacopoDeMaio.TattooStudio.payloads.TattooSessionReservationDTO;
-import JacopoDeMaio.TattooStudio.payloads.TattooSessionReservationResponseDTO;
 import JacopoDeMaio.TattooStudio.services.ReservationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -35,15 +33,21 @@ public class ReservationController {
         return this.reservationService.getAllReservation(page, size, sortedBy);
     }
 
+    @GetMapping("/me")
+    public List<Reservation> getReservationByUserId(@AuthenticationPrincipal Generic currentAuthenticatedUser) {
+        return this.reservationService.findReservationByUserId(currentAuthenticatedUser.getId());
+    }
+
+
     @PostMapping("/me")
     @ResponseStatus(HttpStatus.CREATED)
-    public ResevationResponseDTO saveReservation(@RequestBody ReservationDTO payload, @AuthenticationPrincipal Generic currentAuthenticatedUser) {
+    public Reservation saveReservation(@RequestBody ReservationDTO payload, @AuthenticationPrincipal Generic currentAuthenticatedUser) {
         return this.reservationService.saveReservation(payload, currentAuthenticatedUser.getId());
     }
 
     @PostMapping("/tattooSessionRequest/me")
     @ResponseStatus(HttpStatus.CREATED)
-    public TattooSessionReservationResponseDTO saveTattooSessionReservation(@RequestBody TattooSessionReservationDTO payload, @AuthenticationPrincipal Generic currentAuthenticatedUser) {
+    public Reservation saveTattooSessionReservation(@RequestBody TattooSessionReservationDTO payload, @AuthenticationPrincipal Generic currentAuthenticatedUser) {
         return this.reservationService.saveTattooSessionReservation(payload, currentAuthenticatedUser.getId());
     }
 

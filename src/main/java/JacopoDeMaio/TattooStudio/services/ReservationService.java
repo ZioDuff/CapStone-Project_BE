@@ -8,9 +8,7 @@ import JacopoDeMaio.TattooStudio.enums.TypeReservation;
 import JacopoDeMaio.TattooStudio.exceptions.BadRequestException;
 import JacopoDeMaio.TattooStudio.exceptions.NotFoundException;
 import JacopoDeMaio.TattooStudio.payloads.ReservationDTO;
-import JacopoDeMaio.TattooStudio.payloads.ResevationResponseDTO;
 import JacopoDeMaio.TattooStudio.payloads.TattooSessionReservationDTO;
-import JacopoDeMaio.TattooStudio.payloads.TattooSessionReservationResponseDTO;
 import JacopoDeMaio.TattooStudio.repositories.ReservationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -62,7 +60,7 @@ public class ReservationService {
     }
 
 
-    public ResevationResponseDTO saveReservation(ReservationDTO payload, UUID userId) {
+    public Reservation saveReservation(ReservationDTO payload, UUID userId) {
         User userFound = (User) this.genericService.findById(userId);
         TattoArtist tattooArtistFound = this.genericService.findByUsername(payload.tattooArtistUsername());
 
@@ -91,24 +89,11 @@ public class ReservationService {
             throw new BadRequestException("Hai gia una prenotazione di consultazione nel nostro studio!");
         }
 
-        userFound.getReservations().add(reservation);
-        tattooArtistFound.getReservations().add(reservation);
 
-        Reservation savedReservation = this.reservationRepository.save(reservation);
-
-        System.out.println("Saved Reservation for User: " + userFound.getReservations());
-        System.out.println("Saved Reservation for Artist: " + tattooArtistFound.getReservations());
-
-
-        return new ResevationResponseDTO(
-                savedReservation.getDateReservation(),
-                savedReservation.getTimeReservation(),
-                savedReservation.getTypeReservation().name(),
-                savedReservation.getTattoArtist().getUsername()
-        );
+        return this.reservationRepository.save(reservation);
     }
 
-    public TattooSessionReservationResponseDTO saveTattooSessionReservation(TattooSessionReservationDTO payload, UUID tattooArtistId) {
+    public Reservation saveTattooSessionReservation(TattooSessionReservationDTO payload, UUID tattooArtistId) {
         User found = this.userService.findUserByUsername(payload.username());
         TattoArtist tattoArtist = this.genericService.findTattooArtistById(tattooArtistId);
 
@@ -126,16 +111,10 @@ public class ReservationService {
                 tattoArtist
         );
 
-        found.getReservations().add(reservation);
-        tattoArtist.getReservations().add(reservation);
 
-        Reservation savedReservation = this.reservationRepository.save(reservation);
-        return new TattooSessionReservationResponseDTO(
-                savedReservation.getDateReservation(),
-                savedReservation.getTimeReservation(),
-                savedReservation.getTypeReservation(),
-                savedReservation.getUser().getUsername()
-        );
+        return this.reservationRepository.save(reservation);
+
+
     }
 
     public Page<Reservation> getAllReservation(int page, int size, String sortedBy) {
@@ -175,6 +154,11 @@ public class ReservationService {
 
     public List<Reservation> findReservationByDateAndTattooArtist(LocalDate date, UUID tattooArtistId) {
         return this.reservationRepository.findByDateReservationAndTattoArtistId(date, tattooArtistId);
+    }
+
+    public List<Reservation> findReservationByUserId(UUID userId) {
+        return this.reservationRepository.findByUserId(userId);
+
     }
 
 
