@@ -9,8 +9,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -44,9 +42,6 @@ public abstract class Generic implements UserDetails {
 
     @Enumerated(EnumType.STRING)
     protected Role role;
-
-    @OneToMany(mappedBy = "generic")
-    private List<Reservation> reservations = new ArrayList<>();
 
 
     public Generic(String username, String email, String password, String name, String surname, int age, String avatarURL) {

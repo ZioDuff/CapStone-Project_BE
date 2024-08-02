@@ -12,7 +12,7 @@ import java.util.UUID;
 @Repository
 public interface ReservationRepository extends JpaRepository<Reservation, UUID> {
 
-    List<Reservation> findByGenericIdAndTypeReservation(UUID userId, TypeReservation typeReservation);
+    List<Reservation> findByUserIdAndTypeReservation(UUID userId, TypeReservation typeReservation);
 
     List<Reservation> findByDateReservationAndTattoArtistId(LocalDate date, UUID tattooArtistId);
 }

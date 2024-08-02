@@ -41,6 +41,7 @@ public class TattoArtist extends Generic {
         this.role = Role.TATTOOARTIST;
         this.description = description;
         this.phoneNumber = phoneNumber;
+
     }
 
     @Override
@@ -54,6 +55,7 @@ public class TattoArtist extends Generic {
                 "description='" + description + '\'' +
                 ", phoneNumber='" + phoneNumber + '\'' +
                 ", tattoos=" + tattoos +
+//                ", reservations=" + reservations +
                 "} " + super.toString();
     }
 }

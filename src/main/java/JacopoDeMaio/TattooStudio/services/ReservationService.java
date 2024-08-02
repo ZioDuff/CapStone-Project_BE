@@ -49,7 +49,7 @@ public class ReservationService {
 
 
     private boolean hasActiveConsultation(UUID userId) {
-        List<Reservation> reservations = reservationRepository.findByGenericIdAndTypeReservation(userId, TypeReservation.CONSULTATION);
+        List<Reservation> reservations = reservationRepository.findByUserIdAndTypeReservation(userId, TypeReservation.CONSULTATION);
         for (Reservation reservation : reservations) {
             if (reservation.getDateReservation().isAfter(LocalDate.now()) ||
                     (reservation.getDateReservation().isEqual(LocalDate.now()) &&
@@ -65,7 +65,6 @@ public class ReservationService {
         User userFound = (User) this.genericService.findById(userId);
         TattoArtist tattooArtistFound = this.genericService.findByUsername(payload.tattooArtistUsername());
 
-
         Reservation reservation = new Reservation(
                 payload.dateReservation(),
                 payload.timeReservation(),
@@ -78,31 +77,28 @@ public class ReservationService {
             throw new BadRequestException("Hai gia una prenotazione di consultazione nel nostro studio!");
         }
 
-
         userFound.getReservations().add(reservation);
         tattooArtistFound.getReservations().add(reservation);
+
+        Reservation savedReservation = this.reservationRepository.save(reservation);
 
         System.out.println("Saved Reservation for User: " + userFound.getReservations());
         System.out.println("Saved Reservation for Artist: " + tattooArtistFound.getReservations());
 
 
-        Reservation savedReservation = this.reservationRepository.save(reservation);
         return new ResevationResponseDTO(
                 savedReservation.getDateReservation(),
                 savedReservation.getTimeReservation(),
                 savedReservation.getTypeReservation().name(),
                 savedReservation.getTattoArtist().getUsername()
-
         );
-
-
     }
 
     public TattooSessionReservationResponseDTO saveTattooSessionReservation(TattooSessionReservationDTO payload, UUID tattooArtistId) {
         User found = this.userService.findUserByUsername(payload.username());
         TattoArtist tattoArtist = this.genericService.findTattooArtistById(tattooArtistId);
 
-        List<Reservation> existingConsultations = reservationRepository.findByGenericIdAndTypeReservation(found.getId(), TypeReservation.CONSULTATION);
+        List<Reservation> existingConsultations = reservationRepository.findByUserIdAndTypeReservation(found.getId(), TypeReservation.CONSULTATION);
         for (Reservation consultation : existingConsultations) {
             reservationRepository.delete(consultation);
         }
@@ -124,7 +120,7 @@ public class ReservationService {
                 savedReservation.getDateReservation(),
                 savedReservation.getTimeReservation(),
                 savedReservation.getTypeReservation(),
-                savedReservation.getGeneric().getUsername()
+                savedReservation.getUser().getUsername()
         );
     }
 

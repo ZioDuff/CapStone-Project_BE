@@ -35,9 +35,9 @@ public class Reservation {
     private TypeReservation typeReservation;
 
     @ManyToOne
-    @JoinColumn(name = "generic_id")
+    @JoinColumn(name = "user_id")
     @JsonIgnoreProperties("reservations")
-    private Generic generic;
+    private User user;
 
     @ManyToOne
     @JoinColumn(name = "tattooArtist_id")
@@ -45,11 +45,11 @@ public class Reservation {
     private TattoArtist tattoArtist;
 
 
-    public Reservation(LocalDate dateReservation, LocalTime timeReservation, TypeReservation typeReservation, Generic generic, TattoArtist tattoArtist) {
+    public Reservation(LocalDate dateReservation, LocalTime timeReservation, TypeReservation typeReservation, User user, TattoArtist tattoArtist) {
         this.dateReservation = dateReservation;
         this.timeReservation = timeReservation;
         this.typeReservation = typeReservation;
-        this.generic = generic;
+        this.user = user;
         this.tattoArtist = tattoArtist;
     }
 
