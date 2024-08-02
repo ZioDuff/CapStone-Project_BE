@@ -49,12 +49,13 @@ public class ReservationController {
 
 
     @DeleteMapping("/me/{reservationId}")
-    public void deleteOwnReservation(@PathVariable UUID reservationId) {
-        this.reservationService.deleteOwnReservation(reservationId);
+    public void deleteOwnReservation(@PathVariable UUID reservationId, @AuthenticationPrincipal Generic currentAuthenticatedUser) {
+        this.reservationService.deleteOwnReservation(reservationId, currentAuthenticatedUser.getId());
     }
 
 
     @GetMapping("/me/{reservationId}")
+    @PreAuthorize("hasAuthority('TATTOOARTIST')")
     public Reservation findReservationById(@PathVariable UUID reservationId) {
         return this.reservationService.findById(reservationId);
     }

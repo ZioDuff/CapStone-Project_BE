@@ -1,5 +1,6 @@
 package JacopoDeMaio.TattooStudio.services;
 
+import JacopoDeMaio.TattooStudio.entities.Generic;
 import JacopoDeMaio.TattooStudio.entities.Reservation;
 import JacopoDeMaio.TattooStudio.entities.TattoArtist;
 import JacopoDeMaio.TattooStudio.entities.User;
@@ -64,6 +65,19 @@ public class ReservationService {
     public ResevationResponseDTO saveReservation(ReservationDTO payload, UUID userId) {
         User userFound = (User) this.genericService.findById(userId);
         TattoArtist tattooArtistFound = this.genericService.findByUsername(payload.tattooArtistUsername());
+
+        LocalDate today = LocalDate.now();
+        LocalTime now = LocalTime.now();
+
+
+        if (payload.dateReservation().isBefore(today)) {
+            throw new BadRequestException("La data della prenotazione deve essere almeno la data di oggi.");
+        }
+
+
+        if (payload.dateReservation().isEqual(today) && payload.timeReservation().isBefore(now.plusHours(1))) {
+            throw new BadRequestException("L'ora della prenotazione deve essere almeno un'ora dopo l'ora attuale.");
+        }
 
         Reservation reservation = new Reservation(
                 payload.dateReservation(),
@@ -131,11 +145,31 @@ public class ReservationService {
     }
 
 
-    public void deleteOwnReservation(UUID reservationId) {
+    public void deleteOwnReservation(UUID reservationId, UUID genericId) {
+
+        Generic generic = this.genericService.findById(genericId);
+
+        LocalDate today = LocalDate.now();
+        LocalDate tomorrow = LocalDate.now().plusDays(1);
+
         Reservation reservation = this.reservationRepository.findById(reservationId)
                 .orElseThrow(() -> new NotFoundException("la prenotazione con id: " + reservationId + " non è stata trovata"));
 
-        this.reservationRepository.delete(reservation);
+        if (reservation.getUser().getId().equals(generic.getId()) && reservation.getDateReservation().isEqual(today)) {
+            throw new BadRequestException("Attenzione! non puoi eliminare più la prenotazione. Per ulteriori informazioni chiamaci");
+        }
+        if (reservation.getUser().getId().equals(generic.getId()) && reservation.getDateReservation().isEqual(tomorrow)) {
+            throw new BadRequestException("Attenzione! non puoi eliminare più la prenotazione. Per ulteriori informazioni chiamaci");
+        }
+
+        if (generic instanceof User user) {
+            if (reservation.getUser().getRole().equals(user.getRole()) && reservation.getTypeReservation().name().equalsIgnoreCase("TATTOO_SESSION")) {
+                throw new BadRequestException("Non puo eliminare Le prenotazioni con tipo: TATTOO SESSION");
+            }
+        } else if (generic instanceof TattoArtist tattooArtist) {
+            this.reservationRepository.delete(reservation);
+        }
+
     }
 
 
