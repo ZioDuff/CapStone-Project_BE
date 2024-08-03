@@ -165,6 +165,8 @@ public class ReservationService {
         if (generic instanceof User user) {
             if (reservation.getUser().getRole().equals(user.getRole()) && reservation.getTypeReservation().name().equalsIgnoreCase("TATTOO_SESSION")) {
                 throw new BadRequestException("Non puo eliminare Le prenotazioni con tipo: TATTOO SESSION");
+            } else {
+                this.reservationRepository.delete(reservation);
             }
         } else if (generic instanceof TattoArtist tattooArtist) {
             this.reservationRepository.delete(reservation);
