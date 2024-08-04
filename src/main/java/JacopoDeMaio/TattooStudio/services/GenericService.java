@@ -6,6 +6,8 @@ import JacopoDeMaio.TattooStudio.entities.Tattoo;
 import JacopoDeMaio.TattooStudio.exceptions.BadRequestException;
 import JacopoDeMaio.TattooStudio.exceptions.NotFoundException;
 import JacopoDeMaio.TattooStudio.payloads.userDTO.GenericDTO;
+import JacopoDeMaio.TattooStudio.payloads.userDTO.UpdateEmailDTO;
+import JacopoDeMaio.TattooStudio.payloads.userDTO.UpdatePasswordDTO;
 import JacopoDeMaio.TattooStudio.repositories.GenericRepository;
 import JacopoDeMaio.TattooStudio.repositories.TattooArtistRepository;
 import JacopoDeMaio.TattooStudio.repositories.TattooRepository;
@@ -107,13 +109,25 @@ public class GenericService {
     public Generic findByIdAndUpdate(UUID id, GenericDTO payload) {
 
         Generic found = this.findById(id);
+
+
         found.setUsername(payload.username());
         found.setName(payload.name());
         found.setSurname(payload.surname());
 
+
+        this.genericRepository.findByUsername(payload.username()).ifPresent(generic -> {
+            throw new BadRequestException("L'username: " + payload.username() + " è gia in uso");
+        });
+
+
         if (found instanceof TattoArtist) {
             ((TattoArtist) found).setDescription(payload.description());
             ((TattoArtist) found).setPhoneNumber(payload.phoneNumber());
+
+            this.tattooArtistRepository.findByPhoneNumber(payload.phoneNumber()).ifPresent(tattoArtist -> {
+                throw new BadRequestException("Il numero: " + payload.phoneNumber() + " è gia associato ad un account");
+            });
         }
         return genericRepository.save(found);
     }
@@ -121,6 +135,29 @@ public class GenericService {
     public void findByIdAndDelete(UUID userid) {
         Generic found = this.findById(userid);
         this.genericRepository.delete(found);
+    }
+
+
+    public Generic findByIdAndUpdateEmail(UUID genericId, UpdateEmailDTO payload) {
+
+        Generic found = this.findById(genericId);
+
+        this.genericRepository.findByEmail(payload.email()).ifPresent(generic -> {
+            throw new BadRequestException("L'email: " + payload.email() + " è gia in uso");
+        });
+
+        found.setEmail(payload.email());
+
+        return this.genericRepository.save(found);
+    }
+
+    public Generic findByIdAndUpdatePassword(UUID genericId, UpdatePasswordDTO payload) {
+
+        Generic found = this.findById(genericId);
+
+        found.setPassword(bCrypt.encode(payload.password()));
+
+        return this.genericRepository.save(found);
     }
 
     public void findTattooArtistAndDeleteTattoo(UUID tattooArtistId, UUID tattooId) {
