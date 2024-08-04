@@ -4,6 +4,8 @@ import JacopoDeMaio.TattooStudio.entities.Generic;
 import JacopoDeMaio.TattooStudio.exceptions.BadRequestException;
 import JacopoDeMaio.TattooStudio.payloads.userDTO.GenericDTO;
 import JacopoDeMaio.TattooStudio.payloads.userDTO.NewGenericResponseDTO;
+import JacopoDeMaio.TattooStudio.payloads.userDTO.UpdateEmailDTO;
+import JacopoDeMaio.TattooStudio.payloads.userDTO.UpdatePasswordDTO;
 import JacopoDeMaio.TattooStudio.services.GenericService;
 import JacopoDeMaio.TattooStudio.services.TattooArtistService;
 import JacopoDeMaio.TattooStudio.services.TattooService;
@@ -68,6 +70,16 @@ public class GenericController {
     @PutMapping("/me")
     public Generic updateOwnProfile(@AuthenticationPrincipal Generic currentAuthenticatedUser, @RequestBody GenericDTO payload) {
         return this.genericService.findByIdAndUpdate(currentAuthenticatedUser.getId(), payload);
+    }
+
+    @PatchMapping("/me/email")
+    public Generic updateOwnEmail(@AuthenticationPrincipal Generic currentAuthenticatedUser, @RequestBody UpdateEmailDTO payload) {
+        return this.genericService.findByIdAndUpdateEmail(currentAuthenticatedUser.getId(), payload);
+    }
+
+    @PatchMapping("/me/password")
+    public Generic updateOwnPassword(@AuthenticationPrincipal Generic currentAuthenticatedUser, @RequestBody UpdatePasswordDTO payload) {
+        return this.genericService.findByIdAndUpdatePassword(currentAuthenticatedUser.getId(), payload);
     }
 
     @DeleteMapping("/me")
