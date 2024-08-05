@@ -117,7 +117,9 @@ public class GenericService {
 
 
         this.genericRepository.findByUsername(payload.username()).ifPresent(generic -> {
-            throw new BadRequestException("L'username: " + payload.username() + " è gia in uso");
+            if (!generic.getId().equals(id)) {
+                throw new BadRequestException("L'username: " + payload.username() + " è gia in uso");
+            }
         });
 
 
@@ -126,7 +128,9 @@ public class GenericService {
             ((TattoArtist) found).setPhoneNumber(payload.phoneNumber());
 
             this.tattooArtistRepository.findByPhoneNumber(payload.phoneNumber()).ifPresent(tattoArtist -> {
-                throw new BadRequestException("Il numero: " + payload.phoneNumber() + " è gia associato ad un account");
+                if (!tattoArtist.getId().equals(id)) {
+                    throw new BadRequestException("Il numero: " + payload.phoneNumber() + " è gia associato ad un account");
+                }
             });
         }
         return genericRepository.save(found);
