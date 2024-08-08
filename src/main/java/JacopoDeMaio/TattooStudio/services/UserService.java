@@ -75,7 +75,9 @@ public class UserService {
     }
 
     public User findUserByUsername(String username) {
-        return this.userRepository.findByUsername(username);
+        return this.userRepository.findByUsername(username).orElseThrow(
+                () -> new NotFoundException("L'utente con username: " + username + " non è stato trovato")
+        );
     }
 
 

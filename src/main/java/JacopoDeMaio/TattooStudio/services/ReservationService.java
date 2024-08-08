@@ -96,8 +96,14 @@ public class ReservationService {
 
         Reservation savedReservation = this.reservationRepository.save(reservation);
 
-        System.out.println("Saved Reservation for User: " + userFound.getReservations());
-        System.out.println("Saved Reservation for Artist: " + tattooArtistFound.getReservations());
+        if (payload.dateReservation().isBefore(today)) {
+            throw new BadRequestException("La data della prenotazione deve essere almeno la data di oggi.");
+        }
+
+
+        if (payload.dateReservation().isEqual(today) && payload.timeReservation().isBefore(now.plusHours(1))) {
+            throw new BadRequestException("L'ora della prenotazione deve essere almeno un'ora dopo l'ora attuale.");
+        }
 
 
         return new ResevationResponseDTO(
