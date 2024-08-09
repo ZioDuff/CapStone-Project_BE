@@ -96,15 +96,6 @@ public class ReservationService {
 
         Reservation savedReservation = this.reservationRepository.save(reservation);
 
-        if (payload.dateReservation().isBefore(today)) {
-            throw new BadRequestException("La data della prenotazione deve essere almeno la data di oggi.");
-        }
-
-
-        if (payload.dateReservation().isEqual(today) && payload.timeReservation().isBefore(now.plusHours(1))) {
-            throw new BadRequestException("L'ora della prenotazione deve essere almeno un'ora dopo l'ora attuale.");
-        }
-
 
         return new ResevationResponseDTO(
                 savedReservation.getDateReservation(),
@@ -121,6 +112,19 @@ public class ReservationService {
         List<Reservation> existingConsultations = reservationRepository.findByUserIdAndTypeReservation(found.getId(), TypeReservation.CONSULTATION);
         for (Reservation consultation : existingConsultations) {
             reservationRepository.delete(consultation);
+        }
+
+        LocalDate today = LocalDate.now();
+        LocalTime now = LocalTime.now();
+
+
+        if (payload.dateReservation().isBefore(today)) {
+            throw new BadRequestException("La data della prenotazione deve essere almeno la data di oggi.");
+        }
+
+
+        if (payload.dateReservation().isEqual(today) && payload.timeReservation().isBefore(now.plusHours(1))) {
+            throw new BadRequestException("L'ora della prenotazione deve essere almeno un'ora dopo l'ora attuale.");
         }
 
 
