@@ -1,6 +1,7 @@
 package JacopoDeMaio.TattooStudio.entities;
 
 import JacopoDeMaio.TattooStudio.enums.Role;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
@@ -28,6 +29,7 @@ public class TattoArtist extends Generic {
 
 
     @OneToMany(mappedBy = "tattooArtist", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnoreProperties("tattooArtist")
     private Set<Tattoo> tattoos;
 
     @OneToMany(mappedBy = "tattoArtist")
